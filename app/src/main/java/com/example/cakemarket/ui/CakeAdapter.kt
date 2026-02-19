@@ -9,13 +9,14 @@ import com.example.cakemarket.databinding.ItemCakesBinding
 import com.example.cakemarket.model.CakeResponseItem
 
 class CakeAdapter(
-    private var cakes: List<CakeResponseItem> = emptyList()  // mutable
+    private val cakes: List<CakeResponseItem>
 ) : RecyclerView.Adapter<CakeAdapter.CakeViewHolder>() {
 
-    class CakeViewHolder(val binding: ItemCakesBinding) :
-        RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CakeViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CakeViewHolder {
         val binding = ItemCakesBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -24,28 +25,31 @@ class CakeAdapter(
         return CakeViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CakeViewHolder, position: Int) {
-        val cakeItem = cakes[position]
+    override fun onBindViewHolder(
+        holder: CakeViewHolder,
+        position: Int
+    ) {
 
         holder.binding.apply {
+            val cakeItem = cakes[position]
             tvCake.text = cakeItem.title
             tvDescription.text = cakeItem.desc
 
             Glide.with(holder.itemView.context)
-                .load("https://services.hanselandpetal.com/photos/${cakeItem.image}")
+                .load(cakeItem.image)
                 .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
                 .circleCrop()
                 .into(imgPhoto)
         }
     }
 
-    override fun getItemCount(): Int = cakes.size
+    override fun getItemCount(): Int {
+        return cakes.size
 
-    // ✅ Method to update the adapter data
-    fun updateCakes(newCakes: List<CakeResponseItem>) {
-        cakes = newCakes
-        notifyDataSetChanged()
     }
+    class CakeViewHolder(val binding: ItemCakesBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }
+
+
 

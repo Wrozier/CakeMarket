@@ -53,9 +53,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeData() {
         viewModel.cakes.observe(this) { cakes ->
-            Log.i("Data", cakes[0].title)
-            // update adapter's data
-            adapter.updateCakes(cakes)
+
+            Log.i("DATA_SIZE", "Size = ${cakes.size}")
+
+            // Always set adapter (even if empty)
+            binding.rvCakes.adapter = CakeAdapter(cakes)
         }
 
         viewModel.loading.observe(this) { isLoading ->
@@ -66,5 +68,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
         }
     }
+
+
 
 }
